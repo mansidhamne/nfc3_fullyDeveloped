@@ -18,7 +18,7 @@ export class Attendance {
 
   @Prop({ required: true,type:String,enum:['TOC','SE','ITL'],default:'TOC'})
   subject: string;
-  
+
   @Prop({
     type: {
       latitude: { type: Number, required: true },
@@ -31,6 +31,10 @@ export class Attendance {
     longitude: number;
   };
 
+  @Prop()
+  lecture_time:string;
+  @Prop()
+  attendance_time:string;
   @Prop({ type: String, enum: ['Present', 'Absent'], default: 'Absent' })
   status: string;
 }
