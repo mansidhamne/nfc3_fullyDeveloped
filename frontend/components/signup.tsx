@@ -3,6 +3,8 @@ import { Label } from "./ui/label";
 import { Input } from "./ui/input";
 import { cn } from "@/lib/utils";
 import { useAuth } from '../contexts/AuthContext';
+import { useRouter } from 'next/navigation';
+
 
 export function SignupFormDemo() {
   const [isLogin, setIsLogin] = useState(true);
@@ -26,22 +28,42 @@ export function SignupFormDemo() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  const router=useRouter();
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+  
     try {
       if (!isLogin && role) {
         await register({ ...formData, role });
+        if (role === 'student') {
+          router.push('/face-recognition');
+        } else if (role === 'teacher') {
+          router.push(`/admin-dashboard?teacherId=${formData.teacherId}`);
+        }
       } else {
-        await login(formData.email, formData.password);
+        const response = await login(formData.email, formData.password);
+        const userRole = response.role;
+         // Retrieve role from the login response
+        const user=response.user;
+  
+        if (userRole === 'student') {
+          router.push(`/student-dashboard/${user.studentId}`);
+        } else if (userRole === 'teacher') {
+          router.push(`/admin-dashboard/${user.teacherId}`);
+        }
       }
     } catch (error) {
       console.error('Authentication error:', error);
     }
   };
+  
+  
+  
 
   return (
-    <div className="max-w-md w-full mx-auto rounded-none md:rounded-2xl p-4 md:p-8 shadow-input bg-white dark:bg-black h-screen overflow-hidden flex flex-col">
-      <h2 className="font-bold text-xl text-neutral-800 dark:text-neutral-200">
+    <div className=" mx-auto rounded-none md:rounded-2xl p-4 md:p-8 shadow-input bg-white dark:bg-black h-screen overflow-hidden flex flex-col justify-center" style={{width:"40vw", padding:'20px', maxHeight:'90vh'}}>
+      <h2 className="pt-10 font-bold text-xl text-neutral-800 dark:text-neutral-200">
         Welcome to EduVerse
       </h2>
       <p className="text-neutral-600 text-sm max-w-sm mt-2 dark:text-neutral-300">
@@ -110,25 +132,25 @@ export function SignupFormDemo() {
             </LabelInputContainer>
           )}
         </div>
-      </form>
-
-      <div className="mt-4">
-        <button
-          className="bg-gradient-to-br relative group/btn from-black dark:from-zinc-900 dark:to-zinc-900 to-neutral-600 block dark:bg-zinc-800 w-full text-white rounded-md h-10 font-medium shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] dark:shadow-[0px_1px_0px_0px_var(--zinc-800)_inset,0px_-1px_0px_0px_var(--zinc-800)_inset]"
-          type="submit"
-        >
-          {isLogin ? "Login" : "Sign up"} &rarr;
-          <BottomGradient />
-        </button>
-
-        <div className="bg-gradient-to-r from-transparent via-neutral-300 dark:via-neutral-700 to-transparent my-4 h-[1px] w-full" />
-
-        <div className="text-center">
-          <button type="button" onClick={() => setIsLogin(!isLogin)} className="text-blue-500">
-            {isLogin ? "Need an account? Sign up" : "Already have an account? Login"}
+        
+        <div className="mt-4">
+          <button
+            className="bg-gradient-to-br relative group/btn from-black dark:from-zinc-900 dark:to-zinc-900 to-neutral-600 block dark:bg-zinc-800 w-full text-white rounded-md h-10 font-medium shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] dark:shadow-[0px_1px_0px_0px_var(--zinc-800)_inset,0px_-1px_0px_0px_var(--zinc-800)_inset]"
+            type="submit"
+          >
+            {isLogin ? "Login" : "Sign up"} &rarr;
+            <BottomGradient />
           </button>
+
+          <div className="bg-gradient-to-r from-transparent via-neutral-300 dark:via-neutral-700 to-transparent my-4 h-[1px] w-full" />
+
+          <div className="text-center">
+            <button type="button" onClick={() => setIsLogin(!isLogin)} className="text-blue-500">
+              {isLogin ? "Need an account? Sign up" : "Already have an account? Login"}
+            </button>
+          </div>
         </div>
-      </div>
+      </form>
     </div>
   );
 }

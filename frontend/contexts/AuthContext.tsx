@@ -3,11 +3,11 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 import axios from 'axios';
 
 interface AuthContextType {
-  user: any;
-  login: (email: string, password: string) => Promise<void>;
-  register: (userData: any) => Promise<void>;
-  logout: () => void;
-}
+    user: any;
+    login: (email: string, password: string) => Promise<{ user: any; role: string }>;
+    register: (userData: any) => Promise<void>;
+    logout: () => void;
+  }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
@@ -17,20 +17,32 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   useEffect(() => {
     const storedUser = localStorage.getItem('user');
     if (storedUser) {
-      setUser(JSON.parse(storedUser));
+      try {
+        setUser(JSON.parse(storedUser));
+      } catch (error) {
+        console.error("Failed to parse stored user data:", error);
+        localStorage.removeItem('user'); // Remove invalid data from localStorage
+      }
     }
   }, []);
-
   const login = async (email: string, password: string) => {
     try {
+        console.log('Login data:', { email, password });
       const response = await axios.post('http://localhost:3000/auth/login', { email, password });
-      setUser(response.data.user);
-      localStorage.setItem('user', JSON.stringify(response.data.user));
+      const { user, role } = response.data;
+  
+      setUser(user);
+      localStorage.setItem('user', JSON.stringify(user));
+      localStorage.setItem('role', role); // Store role in localStorage or state
+  
+      return { user, role }; // Return the user and role
     } catch (error) {
       console.error('Login failed', error);
       throw error;
     }
   };
+  
+  
 
   const register = async (userData: any) => {
     try {
