@@ -7,14 +7,17 @@ export type AttendanceDocument = Attendance & Document;
 
 @Schema()
 export class Attendance {
-  // @Prop({ required: true })
-  // email: string;
+  @Prop({ required: true })
+  email: string;
 
-  @Prop({ type: Types.ObjectId, ref: 'User', required: true })  // Reference to User schema
-  user: Types.ObjectId;  // Reference field
+  @Prop({requied: true})
+  id: number;
 
   @Prop({ required: true, type: Date, default: Date.now })
   date: Date;
+
+  @Prop({ required: true,type:String,enum:['TOC','SE','ITL'],default:'TOC'})
+  subject: string;
 
   @Prop({
     type: {
@@ -28,6 +31,10 @@ export class Attendance {
     longitude: number;
   };
 
+  @Prop()
+  lecture_time:string;
+  @Prop()
+  attendance_time:string;
   @Prop({ type: String, enum: ['Present', 'Absent'], default: 'Absent' })
   status: string;
 }
