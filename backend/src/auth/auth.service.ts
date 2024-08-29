@@ -15,10 +15,12 @@ export class AuthService {
     @InjectModel(Teacher.name) private teacherModel: Model<Teacher>,
     private jwtService: JwtService,
   ) {}
-
+  async findOne(teacherId: string): Promise<Teacher | null> {
+    return this.teacherModel.findOne({teacherId}); // Adjust based on your repository method
+  }
   async register(userData: any): Promise<User> {
-    const { role, ...rest } = userData;
-    const hashedPassword = await bcrypt.hash('your-secret-key', 10);
+    const { role,password, ...rest } = userData;
+    const hashedPassword = await bcrypt.hash(password, 10);
     console.log(hashedPassword);
 
     let newUser;
@@ -40,7 +42,7 @@ export class AuthService {
   
     // Check in Student collection
     const teachers = await this.teacherModel.find({}, 'email').exec();
-    console.log( teachers.map(teacher => teacher.email));
+    console.log(teachers.map(teacher => teacher.email));
     user = await this.studentModel.findOne({ email }).exec();
     if (user) {
       role = 'student';
@@ -56,7 +58,7 @@ export class AuthService {
       console.error('User not found:', email);
       throw new UnauthorizedException('Invalid email');
     }
-  
+    
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
       console.error('Invalid password for user:', email);
