@@ -21,7 +21,7 @@ export class AuxService {
       { id: courseId },
       {
         $set: {
-          flag: 1,
+          flag: (geo_latitude > 0 && geo_longitude > 0) ? 1 : 0,
           geo_latitude: geo_latitude,
           geo_longitude: geo_longitude,
         },
