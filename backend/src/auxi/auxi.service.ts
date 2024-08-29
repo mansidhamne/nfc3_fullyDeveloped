@@ -6,7 +6,16 @@ import { Aux } from './schemas/auxi.schema'; // Import the schema
 @Injectable()
 export class AuxService {
   constructor(@InjectModel(Aux.name) private readonly auxModel: Model<Aux>) {}
-
+  async createAux(createAuxDto: { id: string; geo_latitude: number; geo_longitude: number }): Promise<Aux> {
+    const newAux = new this.auxModel({
+      ...createAuxDto,
+      flag: 0, // Default value for flag
+    });
+    return newAux.save();
+  }
+  async getAllAux(): Promise<Aux[]> {
+    return this.auxModel.find().exec(); // Retrieve all documents
+  }
   async updateAux(courseId: string, geo_latitude: number, geo_longitude: number): Promise<Aux> {
     const updatedAux = await this.auxModel.findOneAndUpdate(
       { id: courseId },
