@@ -21,7 +21,7 @@ export class Course {
   year: number;
 
   @Prop()
-  batch: string;
+  branch: string;
 }
 
 export const CourseSchema = SchemaFactory.createForClass(Course);
