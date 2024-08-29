@@ -19,3 +19,5 @@ export class User {
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
+// Optionally, create indexes for the schema (if needed for optimization or uniqueness)
+UserSchema.index({ email: 1 }, { unique: true });  // Ensure unique emails
