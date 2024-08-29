@@ -35,4 +35,42 @@ export class AuxService {
 
     return updatedAux;
   }
+  async updateAttendees(courseId: string, date: string, uid: string, status: string): Promise<Aux> {
+    const updatedAux = await this.auxModel.findOneAndUpdate(
+      { id: courseId },
+      {
+        $push: {
+          [`attendees.${date}`]: { uid: uid, status: status }
+        }
+      },
+      { new: true }
+    );
+
+    if (!updatedAux) {
+      throw new NotFoundException(`Aux record with Course ID ${courseId} not found`);
+    }
+
+    return updatedAux;
+  }
+  async getAttendeesByDate(courseId: string, date: string): Promise<{ date: string; attendees: { uid: string; status: string }[] }> {
+    const aux = await this.auxModel.findOne({ id: courseId }).exec();
+
+    if (!aux) {
+      throw new NotFoundException(`Aux record with Course ID ${courseId} not found`);
+    }
+
+    const attendees = aux.attendees.get(date) || [];
+
+    return { date: date, attendees: attendees };
+  }
+  async getGeoLocationByCourseId(courseId: string): Promise<{ geo_latitude: number; geo_longitude: number }> {
+    const aux = await this.auxModel.findOne({ id: courseId }).exec();
+    if (!aux) {
+      throw new NotFoundException(`Aux record with Course ID ${courseId} not found`);
+    }
+    return {
+      geo_latitude: aux.geo_latitude,
+      geo_longitude: aux.geo_longitude,
+    };
+  }
 }

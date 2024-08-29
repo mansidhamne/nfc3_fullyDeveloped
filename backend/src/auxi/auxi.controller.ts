@@ -15,6 +15,13 @@ export class AuxController {
   async getAllAux(): Promise<Aux[]> {
     return this.auxService.getAllAux();
   }
+  @Patch(':courseId/attendees')
+  async updateAttendees(
+    @Param('courseId') courseId: string,
+    @Body() attendeeDto: { date: string; uid: string; status: string }
+  ): Promise<Aux> {
+    return this.auxService.updateAttendees(courseId, attendeeDto.date, attendeeDto.uid, attendeeDto.status);
+  }
   @Patch(':courseId')
   async updateAux(
     @Param('courseId') courseId: string,
@@ -22,6 +29,17 @@ export class AuxController {
     @Body('geo_longitude') geo_longitude: number,
   ) {
     return this.auxService.updateAux(courseId, geo_latitude, geo_longitude);
+  }
+  @Get(':courseId/attendees/:date')
+  async getAttendeesByDate(
+    @Param('courseId') courseId: string,
+    @Param('date') date: string
+  ): Promise<{ date: string; attendees: { uid: string; status: string }[] }> {
+    return this.auxService.getAttendeesByDate(courseId, date);
+  }
+  @Get(':courseId/geo-location')
+  async getGeoLocationByCourseId(@Param('courseId') courseId: string): Promise<{ geo_latitude: number; geo_longitude: number }> {
+    return this.auxService.getGeoLocationByCourseId(courseId);
   }
 }
 
