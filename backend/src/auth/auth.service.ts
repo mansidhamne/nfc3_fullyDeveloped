@@ -18,7 +18,8 @@ export class AuthService {
 
   async register(userData: any): Promise<User> {
     const { role, ...rest } = userData;
-    const hashedPassword = await bcrypt.hash(rest.password, 10);
+    const hashedPassword = await bcrypt.hash('your-secret-key', 10);
+    console.log(hashedPassword);
 
     let newUser;
     if (role === 'student') {
@@ -31,21 +32,45 @@ export class AuthService {
 
     return newUser.save();
   }
-
-  async login(email: string, password: string): Promise<{ accessToken: string }> {
-    const user = await this.userModel.findOne({ email });
-    if (!user) {
-      throw new UnauthorizedException('Invalid credentials');
+  async login(email: string, password: string): Promise<{ accessToken: string; user: User; role: string }> {
+    console.log('Login attempt:', email);
+    console.log(email?email:'none')
+    let user: UserDocument | null = null;
+    let role: string = '';
+  
+    // Check in Student collection
+    const teachers = await this.teacherModel.find({}, 'email').exec();
+    console.log( teachers.map(teacher => teacher.email));
+    user = await this.studentModel.findOne({ email }).exec();
+    if (user) {
+      role = 'student';
+    } else {
+      // Check in Teacher collection if not found in Student
+      user = await this.teacherModel.findOne({ email }).exec();
+      if (user) {
+        role = 'teacher';
+      }
     }
-
+  
+    if (!user) {
+      console.error('User not found:', email);
+      throw new UnauthorizedException('Invalid email');
+    }
+  
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
-      throw new UnauthorizedException('Invalid credentials');
+      console.error('Invalid password for user:', email);
+      throw new UnauthorizedException('Invalid password');
     }
-
-    const payload = { email: user.email, sub: user._id, role: user.role };
+  
+    const payload = { email: user.email, sub: user._id.toString(), role };
+    const accessToken = this.jwtService.sign(payload);
+  
     return {
-      accessToken: this.jwtService.sign(payload),
+      accessToken,
+      user,
+      role,
     };
   }
+  
 }

@@ -44,7 +44,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ type, role }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} className="space-y-4">
       {type === 'register' && (
         <input
           type="text"
@@ -53,6 +53,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ type, role }) => {
           onChange={handleChange}
           placeholder="Name"
           required
+          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
       )}
       <input
@@ -62,6 +63,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ type, role }) => {
         onChange={handleChange}
         placeholder="Email"
         required
+        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
       />
       <input
         type="password"
@@ -70,6 +72,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ type, role }) => {
         onChange={handleChange}
         placeholder="Password"
         required
+        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
       />
       {type === 'register' && role === 'student' && (
         <>
@@ -80,6 +83,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ type, role }) => {
             onChange={handleChange}
             placeholder="UID"
             required
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
           <input
             type="tel"
@@ -88,6 +92,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ type, role }) => {
             onChange={handleChange}
             placeholder="Phone Number"
             required
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
           <input
             type="number"
@@ -96,6 +101,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ type, role }) => {
             onChange={handleChange}
             placeholder="Year"
             required
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
           <input
             type="text"
@@ -104,6 +110,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ type, role }) => {
             onChange={handleChange}
             placeholder="Branch"
             required
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
           <input
             type="url"
@@ -111,6 +118,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ type, role }) => {
             value={formData.leetcodeProfileUrl}
             onChange={handleChange}
             placeholder="LeetCode Profile URL"
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
           <input
             type="url"
@@ -118,6 +126,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ type, role }) => {
             value={formData.githubProfileUrl}
             onChange={handleChange}
             placeholder="GitHub Profile URL"
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </>
       )}
@@ -129,9 +138,15 @@ const AuthForm: React.FC<AuthFormProps> = ({ type, role }) => {
           onChange={handleChange}
           placeholder="Teacher ID"
           required
+          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
       )}
-      <button type="submit">{type === 'register' ? 'Register' : 'Login'}</button>
+      <button
+        type="submit"
+        className="w-full py-2 px-4 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none"
+      >
+        {type === 'register' ? 'Register' : 'Login'}
+      </button>
     </form>
   );
 };
