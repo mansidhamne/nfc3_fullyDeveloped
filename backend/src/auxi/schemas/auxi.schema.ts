@@ -14,6 +14,15 @@ export class Aux extends Document {
 
   @Prop({ required: true })
   geo_longitude: number; // Longitude
+  @Prop({
+    type: Map,
+    of: [{ uid: String, status: String }],
+    default: {}
+  })
+  attendees: Map<string, { uid: string; status: string }[]>;
+
+  @Prop({ type: Date, default: Date.now })
+  date: Date;
 }
 
 export const AuxSchema = SchemaFactory.createForClass(Aux);
