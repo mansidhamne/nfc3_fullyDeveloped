@@ -41,5 +41,10 @@ export class AuxController {
   async getGeoLocationByCourseId(@Param('courseId') courseId: string): Promise<{ geo_latitude: number; geo_longitude: number }> {
     return this.auxService.getGeoLocationByCourseId(courseId);
   }
+  @Get(':courseId/flag')
+  async getFlagByCourseId(@Param('courseId') courseId: string): Promise<{ flag: number }> {
+    const flag = await this.auxService.getFlagByCourseId(courseId);
+    return { flag };
+  }
 }
 

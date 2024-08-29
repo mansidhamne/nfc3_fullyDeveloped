@@ -73,4 +73,11 @@ export class AuxService {
       geo_longitude: aux.geo_longitude,
     };
   }
+  async getFlagByCourseId(courseId: string): Promise<number> {
+    const aux = await this.auxModel.findOne({ id: courseId }).exec();
+    if (!aux) {
+      throw new NotFoundException(`Aux record with Course ID ${courseId} not found`);
+    }
+    return aux.flag;
+  }
 }
