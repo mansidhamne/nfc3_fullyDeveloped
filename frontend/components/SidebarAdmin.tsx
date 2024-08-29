@@ -46,7 +46,7 @@ const Sidebar: React.FC = () => {
           <div>
             <ul className="px-5 mt-5 list-none flex flex-col gap-7">
                 <li>
-                  <a href="/dashboard" className="flex flex-row gap-2 items-center text-lg">
+                  <a href="/admin-dashboard" className="flex flex-row gap-2 items-center text-lg">
                     <MdSpaceDashboard/> Dashboard
                   </a>
                 </li>
