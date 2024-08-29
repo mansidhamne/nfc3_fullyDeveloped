@@ -1,5 +1,13 @@
 // src/user/user.controller.ts
-import { Controller, Get, Post, Body, Param, Put, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  Put,
+  Delete,
+} from '@nestjs/common';
 import { UserService } from './user.service';
 import { User } from './schemas/user.schema';
 
@@ -23,7 +31,10 @@ export class UserController {
   }
 
   @Put(':id')
-  async update(@Param('id') id: string, @Body() updateUserDto: any): Promise<User> {
+  async update(
+    @Param('id') id: string,
+    @Body() updateUserDto: any,
+  ): Promise<User> {
     return this.userService.update(id, updateUserDto);
   }
 
