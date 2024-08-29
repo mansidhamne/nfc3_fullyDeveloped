@@ -4,12 +4,6 @@ import { Boxes } from "@/components/ui/background-boxes";
 import { cn } from "@/lib/utils";
 import { SignupFormDemo } from "@/components/signup";
 import { AuthProvider } from "@/contexts/AuthContext";
-"use client";
-import React from "react";
-import { Boxes } from "@/components/ui/background-boxes";
-import { cn } from "@/lib/utils";
-import { SignupFormDemo } from "@/components/signup";
-import { AuthProvider } from "@/contexts/AuthContext";
 
 export default function Home() {
   return (
