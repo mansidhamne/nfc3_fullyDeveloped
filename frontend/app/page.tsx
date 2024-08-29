@@ -25,7 +25,7 @@ export default function Home() {
       </span>
     </p>
   </div>
-  <div className="z-20 flex h-full justify-center items-center">
+  <div className="z-20  justify-center items-center">
     <SignupFormDemo />
   </div>
 </div>

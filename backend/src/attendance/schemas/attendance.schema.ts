@@ -1,7 +1,7 @@
 // src/attendance/attendance.schema.ts
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document,Types } from 'mongoose';
-
+import { User } from 'src/schema/user.schema';
 
 export type AttendanceDocument = Attendance & Document;
 
