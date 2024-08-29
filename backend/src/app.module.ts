@@ -5,6 +5,7 @@ import { AppService } from './app.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { AuthModule } from './auth/auth.module';
 import {AttendanceModule} from './attendance/attendance.module';
+import {AuxModule} from './auxi/auxi.module';
 @Module({
   imports: [
     MongooseModule.forRoot(
@@ -12,6 +13,7 @@ import {AttendanceModule} from './attendance/attendance.module';
     ), // Replace with your MongoDB connection string
     AuthModule,
     AttendanceModule,
+    AuxModule,
   ],
   controllers: [AppController],
   providers: [AppService],
