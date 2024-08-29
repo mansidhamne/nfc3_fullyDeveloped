@@ -3,6 +3,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { UserModule } from './user/user.module'; // Assuming you have a UserModule
+import {AttendanceModule} from './attendance/attendance.module';
 @Module({
   imports: [
     MongooseModule.forRoot(
