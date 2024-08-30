@@ -10,7 +10,6 @@ const Page = () => {
     <div className='flex flex-row w-full'>
       
         <Sidebar/>
-        
         <div className="flex flex-col min-w-full min-h-full bg-white py-8 pl-4 pr-2">
             <div className="w-full">
             <h1 className="text-3xl text-black font-bold ">Dashboard</h1>
