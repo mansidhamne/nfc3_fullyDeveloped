@@ -347,7 +347,7 @@ const Attendance = () => {
               }
             }));
   
-          } catch (error) {
+          } catch (error:any) {
             alert('Error marking attendance: ' + (error.message || 'Unknown error.'));
           }
         },

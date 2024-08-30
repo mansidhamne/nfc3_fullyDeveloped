@@ -1,13 +1,16 @@
-import type { Config } from "tailwindcss"
+import type { Config } from "tailwindcss";
+import defaultTheme from "tailwindcss/defaultTheme";
+import colors from "tailwindcss/colors";
+import plugin from "tailwindcss/plugin";
 
-const config = {
+const config: Config = {
   darkMode: ["class"],
   content: [
     './pages/**/*.{ts,tsx}',
     './components/**/*.{ts,tsx}',
     './app/**/*.{ts,tsx}',
     './src/**/*.{ts,tsx}',
-	],
+  ],
   prefix: "",
   theme: {
     container: {
@@ -18,6 +21,9 @@ const config = {
       },
     },
     extend: {
+      boxShadow: {
+        input: `0px 2px 3px -1px rgba(0,0,0,0.1), 0px 1px 0px 0px rgba(25,28,33,0.02), 0px 0px 0px 1px rgba(25,28,33,0.08)`,
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
@@ -74,7 +80,32 @@ const config = {
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
-} satisfies Config
+  plugins: [
+    require("tailwindcss-animate"),
+    plugin(function ({ addBase, theme }) {
+      const flattenColorPalette = (colors: Record<string, any>) =>
+        Object.entries(colors).reduce((acc, [key, value]) => {
+          if (typeof value === "object") {
+            const nested = flattenColorPalette(value);
+            Object.entries(nested).forEach(([nestedKey, nestedValue]) => {
+              acc[`${key}-${nestedKey}`] = nestedValue;
+            });
+          } else {
+            acc[key] = value;
+          }
+          return acc;
+        }, {} as Record<string, string>);
 
-export default config
+      const allColors = flattenColorPalette(theme("colors"));
+      const newVars = Object.fromEntries(
+        Object.entries(allColors).map(([key, val]) => [`--${key}`, val])
+      );
+
+      addBase({
+        ":root": newVars,
+      });
+    }),
+  ],
+};
+
+export default config;

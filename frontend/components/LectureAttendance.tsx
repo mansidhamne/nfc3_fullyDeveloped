@@ -10,15 +10,17 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Search, Trash2 } from "lucide-react";
-import * as XLSX from "xlsx"; // Import the xlsx library
+import * as XLSX from "xlsx";
+import axios from "axios";
 
 interface Student {
-  id: string;
+  uid: string;
   name: string;
+  status: string;
 }
 
 interface Lecture {
-  id: number;
+  id: string;
   title: string;
   startTime: string;
 }
@@ -29,12 +31,13 @@ const LectureAttendance: React.FC = () => {
   const [attendees, setAttendees] = useState<Student[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [searchResults, setSearchResults] = useState<Student[]>([]);
+  const [teacherLocation, setTeacherLocation] = useState<{ latitude: number; longitude: number } | null>(null);
 
   useEffect(() => {
     const fetchUpcomingLecture = async () => {
       const lecture: Lecture = {
-        id: 1,
-        title: "Introduction to React",
+        id: "TOC2324",
+        title: "Theory of Computation",
         startTime: new Date(Date.now() + 3600000).toLocaleString(),
       };
       setUpcomingLecture(lecture);
@@ -43,23 +46,75 @@ const LectureAttendance: React.FC = () => {
     fetchUpcomingLecture();
   }, []);
 
-  const startAttendance = () => {
-    setIsAttendanceStarted(true);
+  const fetchAttendees = async () => {
+    if (!upcomingLecture) return;
+
+    try {
+      const response = await axios.get(`http://localhost:3000/aux/${upcomingLecture.id}/attendees/${new Date().toISOString().split('T')[0]}`);
+      setAttendees(response.data.attendees);
+    } catch (error) {
+      console.error("Failed to fetch attendees:", error);
+    }
   };
 
-  const endAttendance = () => {
-    setIsAttendanceStarted(false);
+  useEffect(() => {
+    if (isAttendanceStarted) {
+      fetchAttendees();
+      const intervalId = setInterval(fetchAttendees, 30000); // Fetch every 30 seconds
+      return () => clearInterval(intervalId);
+    }
+  }, [isAttendanceStarted, upcomingLecture]);
+
+  const startAttendance = async () => {
+    if ("geolocation" in navigator) {
+      navigator.geolocation.getCurrentPosition(
+        async (position) => {
+          const { latitude, longitude } = position.coords;
+          setTeacherLocation({ latitude, longitude });
+          
+          try {
+            await axios.patch(`http://localhost:3000/aux/TOC2324`, {
+              geo_latitude: latitude,
+              geo_longitude: longitude,
+            });
+            setIsAttendanceStarted(true);
+          } catch (error) {
+            console.error("Failed to start attendance:", error);
+          }
+        },
+        (error) => {
+          console.error("Error getting location:", error);
+        }
+      );
+    } else {
+      console.error("Geolocation is not supported by this browser.");
+    }
+  };
+
+  const endAttendance = async () => {
+    try {
+      await axios.patch(`http://localhost:3000/aux/TOC2324`, {
+        geo_latitude: 0,
+        geo_longitude: 0,
+        flag: 1,
+      });
+      setIsAttendanceStarted(false);
+      setTeacherLocation(null);
+    } catch (error) {
+      console.error("Failed to end attendance:", error);
+    }
   };
 
   const handleSearch = (event: ChangeEvent<HTMLInputElement>) => {
     const term = event.target.value;
     setSearchTerm(term);
 
+    // In a real scenario, this would search from your backend
     const results = term
       ? [
-          { id: "S001", name: "John Doe" },
-          { id: "S002", name: "Jane Smith" },
-          { id: "S003", name: "Bob Johnson" },
+          { uid: "S001", name: "John Doe", status: "" },
+          { uid: "S002", name: "Jane Smith", status: "" },
+          { uid: "S003", name: "Bob Johnson", status: "" },
         ].filter((student) =>
           student.name.toLowerCase().includes(term.toLowerCase())
         )
@@ -68,22 +123,38 @@ const LectureAttendance: React.FC = () => {
     setSearchResults(results);
   };
 
-  const addAttendance = (student: Student) => {
-    if (!attendees.some((a) => a.id === student.id)) {
-      setAttendees([...attendees, student]);
+  const addAttendance = async (student: Student) => {
+    if (!attendees.some((a) => a.uid === student.uid)) {
+      try {
+        await axios.patch(`http://localhost:3000/aux/TOC2324/attendees`, {
+          date: new Date().toISOString().split('T')[0],
+          uid: student.uid,
+          status: "present",
+        });
+
+        await fetchAttendees(); // Refresh the attendees list
+      } catch (error) {
+        console.error("Failed to add attendance:", error);
+      }
     }
     setSearchTerm("");
     setSearchResults([]);
   };
 
-  const deleteAttendance = (studentId: string) => {
-    setAttendees(attendees.filter((student) => student.id !== studentId));
+  const deleteAttendance = async (studentId: string) => {
+    try {
+      // You might want to add an API call here to remove the attendance record
+      setAttendees(attendees.filter((student) => student.uid !== studentId));
+    } catch (error) {
+      console.error("Failed to delete attendance:", error);
+    }
   };
 
   const generateExcelReport = () => {
     const data = attendees.map((student) => ({
-      "Student ID": student.id,
+      "Student ID": student.uid,
       Name: student.name,
+      Status: student.status,
       Time: new Date().toLocaleTimeString(),
     }));
 
@@ -95,7 +166,7 @@ const LectureAttendance: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col space-y-4 p-4 ">
+    <div className="flex flex-col space-y-4 p-4">
       {upcomingLecture && (
         <div className="bg-white p-4 rounded-lg shadow-lg">
           <h2 className="text-xl font-semibold">{upcomingLecture.title}</h2>
@@ -127,6 +198,10 @@ const LectureAttendance: React.FC = () => {
         </Button>
       </div>
 
+      {teacherLocation && (
+        <p>Teacher's Location: Lat {teacherLocation.latitude.toFixed(6)}, Long {teacherLocation.longitude.toFixed(6)}</p>
+      )}
+
       {isAttendanceStarted && (
         <div className="space-y-4">
           <div className="relative">
@@ -143,7 +218,7 @@ const LectureAttendance: React.FC = () => {
             <ul className="bg-white border rounded-md shadow-sm max-h-40 overflow-auto">
               {searchResults.map((student) => (
                 <li
-                  key={student.id}
+                  key={student.uid}
                   className="p-2 hover:bg-gray-100 cursor-pointer"
                   onClick={() => addAttendance(student)}
                 >
@@ -159,19 +234,21 @@ const LectureAttendance: React.FC = () => {
                 <TableRow>
                   <TableCell>Student ID</TableCell>
                   <TableCell>Name</TableCell>
+                  <TableCell>Status</TableCell>
                   <TableCell>Time</TableCell>
                   <TableCell>Action</TableCell>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {attendees.map((student) => (
-                  <TableRow key={student.id}>
-                    <TableCell>{student.id}</TableCell>
+                  <TableRow key={student.uid}>
+                    <TableCell>{student.uid}</TableCell>
                     <TableCell>{student.name}</TableCell>
+                    <TableCell>{student.status}</TableCell>
                     <TableCell>{new Date().toLocaleTimeString()}</TableCell>
                     <TableCell>
                       <Button
-                        onClick={() => deleteAttendance(student.id)}
+                        onClick={() => deleteAttendance(student.uid)}
                         className="bg-red-500 text-white"
                       >
                         <Trash2 size={16} />

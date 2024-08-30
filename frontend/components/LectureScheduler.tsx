@@ -207,10 +207,10 @@ const CombinedLectureSchedulerCalendar = () => {
         </Card>
         <AssignmentSubmissionChecker />
         </div>
-        <div className="w-full md:w-4/12 bg-indigo-500 p-4 rounded-lg">
+        <div className="w-full md:w-4/12 bg-indigo-500 p-4 rounded-lg ml-6">
         <h2 className="text-2xl font-semibold text-white mb-4">Calendar</h2>
-        <Card>
-          <CardContent>
+        <Card className='p-0'>
+          <CardContent className='p-0'>
             <CalendarSmall
               onChange={handleDateChange}
               value={selectedDate}
