@@ -8,7 +8,7 @@ export class Course {
   @Prop({ required: true })
   name: string;
 
-  @Prop({ required: true })
+  @Prop({ required: true, unique: true })
   code: string;
 
   @Prop()
@@ -25,3 +25,5 @@ export class Course {
 }
 
 export const CourseSchema = SchemaFactory.createForClass(Course);
+
+CourseSchema.index({ code: 1 });

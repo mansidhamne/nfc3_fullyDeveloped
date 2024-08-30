@@ -14,7 +14,7 @@ import { Course } from './schemas/course.schema';
 export class CourseController {
   constructor(private readonly courseService: CourseService) {}
 
-  @Post('/create')
+  @Post()
   async create(@Body() createCourseDto: Partial<Course>): Promise<Course> {
     return this.courseService.createCourse(createCourseDto);
   }
@@ -24,7 +24,6 @@ export class CourseController {
     return this.courseService.findAllCourses();
   }
 
-  // Get a course by ID
   @Get(':id')
   async findOne(@Param('id') id: string): Promise<Course> {
     try {

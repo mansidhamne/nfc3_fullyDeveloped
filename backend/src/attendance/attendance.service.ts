@@ -6,7 +6,8 @@ import { Attendance, AttendanceDocument } from './schemas/attendance.schema';
 @Injectable()
 export class AttendanceService {
   constructor(
-    @InjectModel(Attendance.name) private attendanceModel: Model<AttendanceDocument>,
+    @InjectModel(Attendance.name)
+    private attendanceModel: Model<AttendanceDocument>,
   ) {}
 
   async create(attendanceData: Partial<Attendance>): Promise<Attendance> {
@@ -23,6 +24,8 @@ export class AttendanceService {
   }
 
   async updateStatus(id: number, status: string): Promise<Attendance> {
-    return this.attendanceModel.findOneAndUpdate({ id }, { status }, { new: true }).exec();
+    return this.attendanceModel
+      .findOneAndUpdate({ id }, { status }, { new: true })
+      .exec();
   }
 }

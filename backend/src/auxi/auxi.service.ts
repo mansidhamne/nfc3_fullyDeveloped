@@ -28,16 +28,18 @@ export class AuxService {
       { id: courseId },
       {
         $set: {
-          flag: (geo_latitude > 0 && geo_longitude > 0) ? 1 : 0,
+          flag: geo_latitude > 0 && geo_longitude > 0 ? 1 : 0,
           geo_latitude: geo_latitude,
           geo_longitude: geo_longitude,
         },
       },
-      { new: true }
+      { new: true },
     );
 
     if (!updatedAux) {
-      throw new NotFoundException(`Aux record with Course ID ${courseId} not found`);
+      throw new NotFoundException(
+        `Aux record with Course ID ${courseId} not found`,
+      );
     }
 
     return updatedAux;
@@ -48,14 +50,16 @@ export class AuxService {
       { id: courseId },
       {
         $push: {
-          [`attendees.${date}`]: { uid: uid, status: status }
-        }
+          [`attendees.${date}`]: { uid: uid, status: status },
+        },
       },
-      { new: true }
+      { new: true },
     );
 
     if (!updatedAux) {
-      throw new NotFoundException(`Aux record with Course ID ${courseId} not found`);
+      throw new NotFoundException(
+        `Aux record with Course ID ${courseId} not found`,
+      );
     }
 
     return updatedAux;
@@ -65,7 +69,9 @@ export class AuxService {
     const aux = await this.auxModel.findOne({ id: courseId }).exec();
  
     if (!aux) {
-      throw new NotFoundException(`Aux record with Course ID ${courseId} not found`);
+      throw new NotFoundException(
+        `Aux record with Course ID ${courseId} not found`,
+      );
     }
 
     const attendees = aux.attendees.get(date) || [];
@@ -95,8 +101,11 @@ console.log(students.map(s => [s.uid, s.name]));
   async getGeoLocationByCourseId(courseId: string): Promise<{ geo_latitude: number; geo_longitude: number }> {
     const aux = await this.auxModel.findOne({ id: courseId }).exec();
     if (!aux) {
-      throw new NotFoundException(`Aux record with Course ID ${courseId} not found`);
+      throw new NotFoundException(
+        `Aux record with Course ID ${courseId} not found`,
+      );
     }
+    console.log(aux);
     return {
       geo_latitude: aux.geo_latitude,
       geo_longitude: aux.geo_longitude,
@@ -106,7 +115,9 @@ console.log(students.map(s => [s.uid, s.name]));
   async getFlagByCourseId(courseId: string): Promise<number> {
     const aux = await this.auxModel.findOne({ id: courseId }).exec();
     if (!aux) {
-      throw new NotFoundException(`Aux record with Course ID ${courseId} not found`);
+      throw new NotFoundException(
+        `Aux record with Course ID ${courseId} not found`,
+      );
     }
     return aux.flag;
   }
