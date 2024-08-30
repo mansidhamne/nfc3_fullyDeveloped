@@ -404,7 +404,7 @@ const Attendance = () => {
     const button = document.getElementById('get-location');
     if (button) {
       button.addEventListener('click', () => {
-        markAttendance('TOC2324', 'mansiadhamne@gmail.com', 'student123');
+        markAttendance('TOC2324', 'mansiadhamne@gmail.com', 'Mansi');
       });
     }
   }, [courses]);
