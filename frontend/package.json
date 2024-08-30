@@ -20,6 +20,7 @@
     "@radix-ui/react-select": "^2.1.1",
     "@radix-ui/react-slot": "^1.1.0",
     "@tabler/icons-react": "^3.14.0",
+    "@types/react-circular-progressbar": "^1.1.0",
     "@zegocloud/zego-uikit-prebuilt": "^2.8.1",
     "axios": "^1.7.5",
     "big": "^0.5.2",

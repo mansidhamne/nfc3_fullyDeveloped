@@ -15,10 +15,7 @@ const Page = () => {
         <div className="flex flex-col min-w-full min-h-full bg-white py-8 pl-4 pr-2" >
             <div className="w-full">
             <h1 className="text-3xl text-black font-bold ">Lecture Attendance Manager</h1>
-<<<<<<< HEAD
-            <h5> className='text-xl text-indigo-500 font-medium mt-1'>Start Attendance, View Attendees Real Time and Generate Report!</h5>
-=======
->>>>>>> 64c8286b5e1a156492e5592a160b360ef8568e31
+            <h5> className='text-xl text-indigo-500 font-medium mt-1'Start Attendance, View Attendees Real Time and Generate Report!</h5>
              <div className='max-w-1/2' style={{maxWidth:'80vw'}}>
              <LectureAttendance/>
              </div>
