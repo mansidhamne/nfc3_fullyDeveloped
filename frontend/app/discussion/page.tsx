@@ -6,13 +6,15 @@ import React from 'react'
 
 const Discussion = () => {
   return (
-    <div className="flex flex-row min-w-full min-h-full bg-white">
+    <div className="flex flex-row justify-between min-w-full bg-white">
         <Sidebar/>
-        <VirtualAssistant />
-        <div className="flex flex-col">
+        {/* <VirtualAssistant /> */}
+        <VideoCard />
+        <LiveBlocks />
+        {/* <div className="flex flex-row mt-8 gap-4">
             <VideoCard />
             <LiveBlocks />
-        </div>
+        </div> */}
     </div>
   )
 }

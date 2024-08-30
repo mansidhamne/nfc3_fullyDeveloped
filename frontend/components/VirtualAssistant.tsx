@@ -12,7 +12,7 @@ const StudyGpt = () => {
     setLoading(true);
     try {
       const response = await axios.post(
-        'http://localhost:3000/api/study-gpt/suggestions', // Directly call your NestJS backend
+        'http://localhost:3000/study-gpt/suggestions', // Directly call your NestJS backend
         { prompt },
         {
           headers: {

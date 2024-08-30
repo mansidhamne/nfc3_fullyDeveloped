@@ -23,13 +23,13 @@ const Sidebar: React.FC = () => {
       <div className="flex flex-col h-screen justify-between pt-7">
         <div className="flex flex-col top-0">
           <div className="flex flex-row justify-center pl-4">
-            <a href="/home" className="flex flex-row justify-center">
-              <img src="/logo.png" alt="logo" className="w-[40px] h-[30px]" />
-              <h4 className="pr-5 pl-2 pb-4 font-semibold text-[23px] text-center">EduVerse</h4>
+            <a href="/dashboard" className="flex flex-row justify-center">
+              <img src="/logo.png" alt="logo" className="w-[140px] h-[30px]" />
+              {/* <h4 className="pr-5 pl-2 pb-4 font-semibold text-[23px] text-center">EduVerse</h4> */}
             </a>
           </div>
           <div>
-            <ul className="px-5 mt-5 list-none flex flex-col gap-7">
+            <ul className="px-5 mt-8 list-none flex flex-col gap-7">
                 <li>
                   <a href="/dashboard" className="flex flex-row gap-2 items-center text-lg">
                     <MdSpaceDashboard/> Dashboard

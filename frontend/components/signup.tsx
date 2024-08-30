@@ -37,7 +37,7 @@ export function SignupFormDemo() {
       if (!isLogin && role) {
         await register({ ...formData, role });
         if (role === 'student') {
-          router.push('/face-recognition');
+          router.push('/dashboard');
         } else if (role === 'teacher') {
           router.push(`/admin-dashboard?teacherId=${formData.teacherId}`);
         }
@@ -48,7 +48,7 @@ export function SignupFormDemo() {
         const user=response.user;
   
         if (userRole === 'student') {
-          router.push(`/student-dashboard/${user.studentId}`);
+          router.push(`/dashboard`);
         } else if (userRole === 'teacher') {
           router.push(`/admin-dashboard/${user.teacherId}`);
         }

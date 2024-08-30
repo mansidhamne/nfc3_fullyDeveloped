@@ -7,9 +7,10 @@ const VideoCard: React.FC = () => {
   const [roomId, setRoomId] = useState<string>('');
 
   return (
-    <div className="bg-yellow-100 p-4 rounded-xl mt-4 mx-8 flex flex-col items-center shadow-md">
+    <div className="bg-yellow-100 p-4 rounded-xl mt-4 mx-8 flex flex-col items-center shadow-md w-[500px] h-[500px]">
       <h3 className="text-2xl font-semibold text-center">EduZoom</h3>
-      <p className="text-md mt-2">Make a video room and send it to your friends to work together!</p>
+      <p className="text-md mt-2 text-center">Make a video room and send it to your friends to work together!</p>
+      <img src="https://upload.wikimedia.org/wikipedia/commons/4/40/Zoom_participants_Bubrikh_readings_2020_conference.png" alt="" className="pt-4"/>
       <input
         type='text'
         placeholder='Enter RoomID'

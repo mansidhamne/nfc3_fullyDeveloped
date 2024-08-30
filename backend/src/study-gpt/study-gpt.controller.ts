@@ -1,7 +1,7 @@
 import { Controller, Post, Body } from '@nestjs/common';
 import { StudyGptService } from './study-gpt.service';
 
-@Controller('api/study-gpt')
+@Controller('study-gpt')
 export class StudyGptController {
   constructor(private readonly studyGptService: StudyGptService) {}
 

@@ -8,8 +8,8 @@ import { CourseModule } from './courses/course.module';
 import { AssignmentModule } from './assignment/assignment.module';
 import { VirtualAssistantModule } from './virtual-assistant/virtual-assistant.module';
 import { StudyGptModule } from './study-gpt/study-gpt.module';
-import {AttendanceModule} from './attendance/attendance.module';
-import {AuxModule} from './auxi/auxi.module';
+import { AttendanceModule } from './attendance/attendance.module';
+import { AuxModule } from './auxi/auxi.module';
 
 @Module({
   imports: [
