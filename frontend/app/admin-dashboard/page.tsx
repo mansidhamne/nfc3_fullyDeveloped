@@ -7,8 +7,7 @@ import React from 'react'
 
 const Page = () => {
   return (
-    <div className='flex flex-row w-full'>
-      
+    <div className='flex flex-row w-full overflow-hidden'>
         <Sidebar/>
         <div className="flex flex-col min-w-full min-h-full bg-white py-8 pl-4 pr-2">
             <div className="w-full">

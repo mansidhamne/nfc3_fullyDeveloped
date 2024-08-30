@@ -9,7 +9,7 @@ import React from 'react'
 
 const Page = () => {
   return (
-    <div className='flex flex-row w-full'>
+    <div className='flex flex-row w-full  overflow-hidden'>
       
         <Sidebar/>
         
