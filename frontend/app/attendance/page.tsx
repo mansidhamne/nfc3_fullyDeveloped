@@ -1,8 +1,11 @@
+import StudentAttendance from '@/components/StudentAttendance'
 import React from 'react'
 
 const page = () => {
   return (
-    <div>HEllo</div>
+    <div>
+      <StudentAttendance />
+    </div>
   )
 }
 
